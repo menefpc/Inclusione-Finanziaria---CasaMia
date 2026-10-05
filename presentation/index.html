@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CasaMia — Presentazione del Progetto</title>
+  <style>
+    :root {
+      --acc-purple: #A100FF;
+      --acc-dark: #460073;
+      --acc-black: #000000;
+      --acc-white: #FFFFFF;
+      --acc-gray: #F2F2F2;
+      --acc-gray2: #D9D9D9;
+      --acc-text: #1A1A1A;
+      --font: 'Segoe UI', Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--acc-black);
+      color: var(--acc-white);
+      overflow: hidden;
+    }
+
+    /* SLIDE CONTAINER */
+    .deck { width: 100vw; height: 100vh; position: relative; }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: none;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .slide.active { display: flex; flex-direction: column; }
+
+    /* NAVIGATION */
+    .nav {
+      position: fixed;
+      bottom: 32px;
+      right: 40px;
+      display: flex;
+      gap: 12px;
+      z-index: 999;
+    }
+
+    .nav button {
+      background: var(--acc-purple);
+      color: white;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .nav button:hover { background: var(--acc-dark); transform: scale(1.05); }
+    .nav button:disabled { background: #333; cursor: not-allowed; transform: none; }
+
+    .slide-counter {
+      position: fixed;
+      bottom: 40px;
+      left: 40px;
+      font-size: 0.78rem;
+      color: #666;
+      letter-spacing: 1px;
+    }
+
+    /* ===========================
+       SLIDE 1 — COVER
+    =========================== */
+    #s1 {
+      background: var(--acc-black);
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px;
+    }
+
+    .cover-accent {
+      width: 6px;
+      height: 120px;
+      background: var(--acc-purple);
+      margin-bottom: 40px;
+    }
+
+    .cover-tag {
+      font-size: 0.75rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--acc-purple);
+      margin-bottom: 20px;
+    }
+
+    .cover-title {
+      font-size: clamp(3rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      margin-bottom: 16px;
+      letter-spacing: -2px;
+    }
+
+    .cover-title span { color: var(--acc-purple); }
+
+    .cover-sub {
+      font-size: 1.2rem;
+      color: #999;
+      max-width: 520px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+
+    .cover-meta {
+      font-size: 0.85rem;
+      color: #555;
+      letter-spacing: 0.5px;
+    }
+
+    .acc-logo {
+      position: absolute;
+      top: 40px;
+      right: 60px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--acc-white);
+      letter-spacing: -1px;
+    }
+
+    .acc-logo span { color: var(--acc-purple); }
+
+    /* ===========================
+       SLIDE 2 — PROBLEMA
+    =========================== */
+    #s2 {
+      background: var(--acc-white);
+      color: var(--acc-text);
+    }
+
+    .slide-header {
+      background: var(--acc-black);
+      padding: 32px 80px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .slide-header .tag {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--acc-purple);
+    }
+
+    .slide-header h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      letter-spacing: -0.5px;
+    }
+
+    .slide-body {
+      flex: 1;
+      padding: 60px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 32px;
+    }
+
+    .problem-card {
+      background: var(--acc-gray);
+      border-radius: 4px;
+      padding: 28px;
+      border-left: 4px solid var(--acc-purple);
+    }
+
+    .problem-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--acc-text);
+    }
+
+    .problem-card p {
+      font-size: 0.9rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .stat-big {
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--acc-purple);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .lead-text {
+      font-size: 1.2rem;
+      color: #333;
+      max-width: 700px;
+      line-height: 1.7;
+    }
+
+    /* ===========================
+       SLIDE 3 — SOLUZIONE
+    =========================== */
+    #s3 {
+      background: var(--acc-black);
+      color: white;
+    }
+
+    #s3 .slide-header {
+      background: #0A0A0A;
+    }
+
+    #s3 .slide-header h2 { color: white; }
+    #s3 .slide-header .tag { color: var(--acc-purple); }
+
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .sol-card {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 28px;
+      border-top: 3px solid var(--acc-purple);
+    }
+
+    .sol-icon { font-size: 2rem; margin-bottom: 14px; }
+
+    .sol-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .sol-card p {
+      font-size: 0.88rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    /* ===========================
+       SLIDE 4 — STRUTTURA AGENTICA
+    =========================== */
+    #s4 {
+      background: var(--acc-black);
+      color: white;
+    }
+
+    #s4 .slide-header { background: #111; }
+
+    .agent-diagram {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      margin-top: 48px;
+    }
+
+    .agent-box {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 20px 24px;
+      text-align: center;
+      min-width: 140px;
+    }
+
+    .agent-box.main {
+      background: var(--acc-purple);
+      border-color: var(--acc-purple);
+      min-width: 180px;
+    }
+
+    .agent-box h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 4px; }
+    .agent-box p { font-size: 0.72rem; opacity: 0.7; }
+
+    .agent-arrow {
+      width: 40px;
+      height: 2px;
+      background: #333;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .agent-arrow::after {
+      content: '▶';
+      position: absolute;
+      right: -8px;
+      top: -8px;
+      color: #444;
+      font-size: 0.7rem;
+    }
+
+    .agents-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .agents-sub {
+      display: flex;
+      gap: 12px;
+    }
+
+    .sub-box {
+      background: #111;
+      border: 1px solid var(--acc-purple);
+      border-radius: 4px;
+      padding: 14px 18px;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .sub-box h4 { font-size: 0.78rem; font-weight: 700; color: var(--acc-purple); }
+    .sub-box p { font-size: 0.68rem; opacity: 0.6; margin-top: 4px; }
+
+    .workflow-label {
+      font-size: 0.75rem;
+      color: #555;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    /* ===========================
+       SLIDE 5 — DEMO / FEATURES
+    =========================== */
+    #s5 {
+      background: var(--acc-white);
+      color: var(--acc-text);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    .feat-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px;
+      background: var(--acc-gray);
+      border-radius: 4px;
+    }
+
+    .feat-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--acc-purple);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .feat-text h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .feat-text p { font-size: 0.85rem; color: #555; line-height: 1.5; }
+
+    /* ===========================
+       SLIDE 6 — IMPATTO
+    =========================== */
+    #s6 {
+      background: var(--acc-black);
+      color: white;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 48px;
+    }
+
+    .impact-cell {
+      background: #111;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .impact-num {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: var(--acc-purple);
+      line-height: 1;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .impact-label {
+      font-size: 0.9rem;
+      color: #888;
+      line-height: 1.4;
+    }
+
+    /* ===========================
+       SLIDE 7 — CHIUSURA
+    =========================== */
+    #s7 {
+      background: var(--acc-black);
+      justify-content: center;
+      align-items: flex-start;
+      padding: 80px;
+    }
+
+    .closing-line {
+      width: 80px;
+      height: 4px;
+      background: var(--acc-purple);
+      margin-bottom: 48px;
+    }
+
+    .closing-title {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 32px;
+    }
+
+    .closing-title span { color: var(--acc-purple); }
+
+    .team-row {
+      display: flex;
+      gap: 48px;
+      margin-top: 48px;
+    }
+
+    .team-member {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .team-member strong { font-size: 0.95rem; color: white; }
+    .team-member span { font-size: 0.8rem; color: #555; }
+
+    .closing-cta {
+      margin-top: 64px;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    .closing-cta span { color: var(--acc-purple); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ===================== SLIDE 1: COVER ===================== -->
+  <div class="slide active" id="s1">
+    <div class="acc-logo">Accenture<span>.</span></div>
+    <div class="cover-accent"></div>
+    <div class="cover-tag">Inclusione Finanziaria · Hackathon 2026</div>
+    <h1 class="cover-title">Casa<span>Mia</span></h1>
+    <p class="cover-sub">Il mutuo prima casa spiegato in modo semplice — per chi parte da zero.</p>
+    <div class="cover-meta">TEAM · asia.angelini@accenture.com · Ottobre 2026</div>
+  </div>
+
+  <!-- ===================== SLIDE 2: PROBLEMA ===================== -->
+  <div class="slide" id="s2">
+    <div class="slide-header">
+      <div>
+        <div class="tag">Il problema</div>
+        <h2>I giovani si perdono nel processo del mutuo</h2>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p class="lead-text">Comprare casa è una delle decisioni finanziarie più importanti nella vita, eppure il processo è pieno di termini incomprensibili, documenti oscuri e scadenze stressanti — senza una guida chiara.</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <span class="stat-big">67%</span>
+          <h3>Non capisce i termini</h3>
+          <p>Quasi 7 giovani su 10 non sa distinguere TAN da TAEG o cosa significhi LTV al momento della prima richiesta di mutuo.</p>
+        </div>
+        <div class="problem-card">
+          <span class="stat-big">3–6</span>
+          <h3>Mesi di processo</h3>
+          <p>Il processo dura mesi, con rischi di perdere la caparra se i tempi slittano o se la documentazione non è pronta in tempo.</p>
+        </div>
+        <div class="problem-card">
+          <span class="stat-big">1 su 3</span>
+          <h3>Non conosce le agevolazioni</h3>
+          <p>Un terzo degli under 36 non sa di poter accedere alla garanzia statale Consap o alle esenzioni fiscali sulla prima casa.</p>
+        </div>
+        <div class="problem-card">
+          <span class="stat-big">∞</span>
+          <h3>Ansia da acronimi</h3>
+          <p>Perizia, istruttoria, rogito, spread, Euribor, ammortamento alla francese: il gergo bancario allontana le persone dal prendere decisioni consapevoli.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 3: SOLUZIONE ===================== -->
+  <div class="slide" id="s3">
+    <div class="slide-header">
+      <div>
+        <div class="tag">La soluzione</div>
+        <h2>CasaMia — Una guida, non un consulente</h2>
+      </div>
+    </div>
+    <div class="slide-body">
+      <p style="opacity:0.85; font-size:1.05rem; max-width:700px; line-height:1.7;">
+        Un'applicazione web che accompagna i giovani attraverso ogni passo del processo del mutuo, con spiegazioni in linguaggio semplice, strumenti pratici e un agente conversazionale disponibile 24/7.
+      </p>
+      <div class="solution-grid">
+        <div class="sol-card">
+          <div class="sol-icon">📚</div>
+          <h3>Guida passo-passo</h3>
+          <p>7 fasi del processo spiegate chiaramente, con tempistiche realistiche e consigli pratici per ogni momento.</p>
+        </div>
+        <div class="sol-card">
+          <div class="sol-icon">📖</div>
+          <h3>Glossario interattivo</h3>
+          <p>Ogni termine tecnico spiegato in 3 righe, con esempi concreti in euro — non definizioni da dizionario.</p>
+        </div>
+        <div class="sol-card">
+          <div class="sol-icon">🧮</div>
+          <h3>Calcolatore completo</h3>
+          <p>Rata, LTV, sostenibilità rispetto al reddito, simulazione fisso vs variabile e stima di tutte le spese di avvio (notaio, imposte, agenzia, anticipo).</p>
+        </div>
+        <div class="sol-card">
+          <div class="sol-icon">✅</div>
+          <h3>Checklist per profilo</h3>
+          <p>Si adatta al tipo di contratto (indeterminato, determinato, autonomo) e traccia in tempo reale quanti documenti sono già pronti.</p>
+        </div>
+        <div class="sol-card">
+          <div class="sol-icon">🤖</div>
+          <h3>Agenti in ogni sezione</h3>
+          <p>Quattro agenti specializzati attivi sia in chat sia direttamente nelle sezioni della pagina — routing a regole, nessuna chiamata esterna a pagamento.</p>
+        </div>
+        <div class="sol-card">
+          <div class="sol-icon">🎁</div>
+          <h3>Agevolazioni under 36</h3>
+          <p>Sezione dedicata alle agevolazioni fiscali e alla garanzia Consap per i giovani — spesso sconosciute.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 4: STRUTTURA AGENTICA ===================== -->
+  <div class="slide" id="s4">
+    <div class="slide-header" style="background:#0A0A0A;">
+      <div>
+        <div class="tag">Architettura</div>
+        <h2>Struttura Agentica Multi-Agente</h2>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="agent-diagram">
+        <div class="agent-box">
+          <h4>👤 Utente</h4>
+          <p>Domanda / input</p>
+        </div>
+        <div class="agent-arrow"></div>
+        <div class="agent-box main">
+          <h4>🏠 CasaMia Agent</h4>
+          <p>Orchestratore principale</p>
+        </div>
+        <div class="agent-arrow"></div>
+        <div class="agents-row">
+          <div class="agents-sub">
+            <div class="sub-box">
+              <h4>📖 Glossario</h4>
+              <p>Chat + sezione Dizionario</p>
+            </div>
+            <div class="sub-box">
+              <h4>🧮 Calcolatore</h4>
+              <p>Chat + sezione Calcolatore</p>
+            </div>
+          </div>
+          <div class="agents-sub">
+            <div class="sub-box">
+              <h4>📋 Documenti</h4>
+              <p>Chat + sezione Documenti</p>
+            </div>
+            <div class="sub-box">
+              <h4>🆘 Supporto</h4>
+              <p>Chat + sezione FAQ</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="workflow-label">Ogni agente è richiamabile sia dalla chat sia dalla sezione di pagina corrispondente · Routing a regole, nessuna chiamata esterna · Skills: glossary-lookup, mortgage-calculator, document-checklist-completeness</div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 5: FEATURES ===================== -->
+  <div class="slide" id="s5">
+    <div class="slide-header">
+      <div>
+        <div class="tag">Funzionalità</div>
+        <h2>Cosa fa CasaMia nel dettaglio</h2>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="features-grid">
+        <div class="feat-item">
+          <div class="feat-icon">🗺️</div>
+          <div class="feat-text">
+            <h4>Guida visiva al processo</h4>
+            <p>7 card interattive che descrivono ogni passo con tempistiche realistiche, costi nascosti e consigli pratici.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📅</div>
+          <div class="feat-text">
+            <h4>Roadmap a tappe</h4>
+            <p>5 step numerati e collegati, con una barra proporzionale alla durata reale di ogni fase — non una tabella da project manager, ma un percorso leggibile.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">📊</div>
+          <div class="feat-text">
+            <h4>Calcolatore con simulazione fisso/variabile</h4>
+            <p>Rata, LTV, sostenibilità rispetto al reddito (🟢🟡🔴) e, se il tasso è variabile, come cambierebbe la rata con l'Euribor a +1%, +2% o -1%.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">💰</div>
+          <div class="feat-text">
+            <h4>Spese di avvio del mutuo</h4>
+            <p>Stima di notaio, agenzia, imposta di registro, perizia, istruttoria e polizza — oltre all'anticipo, per sapere quanto contante serve davvero.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">☑️</div>
+          <div class="feat-text">
+            <h4>Checklist filtrata per profilo</h4>
+            <p>Tre pulsanti (indeterminato, determinato, autonomo) filtrano la checklist; una barra segnala quando tutto il necessario è pronto.</p>
+          </div>
+        </div>
+        <div class="feat-item">
+          <div class="feat-icon">❓</div>
+          <div class="feat-text">
+            <h4>FAQ + domanda diretta all'agente</h4>
+            <p>6 domande frequenti espandibili, più una casella per farne una propria: risponde l'Agente Supporto, senza aprire la chat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 6: IMPATTO ===================== -->
+  <div class="slide" id="s6">
+    <div class="slide-header" style="background:#0A0A0A;">
+      <div>
+        <div class="tag">Impatto potenziale</div>
+        <h2>Perché questo strumento conta</h2>
+      </div>
+    </div>
+    <div class="slide-body">
+      <div class="impact-grid">
+        <div class="impact-cell">
+          <span class="impact-num">~400K</span>
+          <span class="impact-label">under 36 acquistano casa<br>ogni anno in Italia</span>
+        </div>
+        <div class="impact-cell">
+          <span class="impact-num">20%</span>
+          <span class="impact-label">non conosce le agevolazioni<br>fiscali a cui ha diritto</span>
+        </div>
+        <div class="impact-cell">
+          <span class="impact-num">€5K+</span>
+          <span class="impact-label">risparmio medio per chi<br>sfrutta le agevolazioni under 36</span>
+        </div>
+        <div class="impact-cell">
+          <span class="impact-num">3 min</span>
+          <span class="impact-label">per capire quanto ci si<br>può permettere grazie al calcolatore</span>
+        </div>
+        <div class="impact-cell">
+          <span class="impact-num">0 €</span>
+          <span class="impact-label">costo di accesso allo strumento<br>— inclusione senza barriere</span>
+        </div>
+        <div class="impact-cell">
+          <span class="impact-num">24/7</span>
+          <span class="impact-label">disponibilità dell'agente<br>per rispondere in ogni momento</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SLIDE 7: CHIUSURA ===================== -->
+  <div class="slide" id="s7">
+    <div class="acc-logo">Accenture<span style="color:var(--acc-purple)">.</span></div>
+    <div class="closing-line"></div>
+    <h2 class="closing-title">Ogni giovane merita<br>di capire come<br><span>comprare casa.</span></h2>
+    <p style="color:#555; font-size:1rem; max-width:500px; line-height:1.7;">
+      CasaMia abbatte le barriere della complessità finanziaria e restituisce autonomia decisionale a chi si avvicina per la prima volta al mondo immobiliare.
+    </p>
+    <div class="team-row">
+      <div class="team-member">
+        <strong>Asia Angelini</strong>
+        <span>asia.angelini@accenture.com</span>
+      </div>
+    </div>
+    <p class="closing-cta">Repository: <span>github.com/[team]/casamia</span> · Ottobre 2026</p>
+  </div>
+
+</div>
+
+<!-- NAVIGATION -->
+<div class="nav">
+  <button id="prevBtn" onclick="changeSlide(-1)" disabled>←</button>
+  <button id="nextBtn" onclick="changeSlide(1)">→</button>
+</div>
+<div class="slide-counter" id="counter">1 / 7</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
+
+  function changeSlide(dir) {
+    slides[current].classList.remove('active');
+    current = Math.max(0, Math.min(slides.length - 1, current + dir));
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = (current + 1) + ' / ' + slides.length;
+    document.getElementById('prevBtn').disabled = current === 0;
+    document.getElementById('nextBtn').disabled = current === slides.length - 1;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') changeSlide(1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') changeSlide(-1);
+  });
+</script>
+
+</body>
+</html>
